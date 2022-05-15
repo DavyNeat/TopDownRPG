@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+using UnityEngine.UI;
 
 public class LevelSystem : MonoBehaviour
 {
@@ -35,9 +35,9 @@ public class LevelSystem : MonoBehaviour
         experienceToNextLevel -= experience;
     }
 
-    public int getExperienceToNextLevel()
+    public float getPercentToNextLevel()
     {
-        return experienceToNextLevel;
+        return 1.0f - ((float)experienceToNextLevel / (float)maxExperience);
     }
 
     void OnTriggerEnter2D(Collider2D collision)
