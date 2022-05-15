@@ -8,9 +8,11 @@ public class LevelSystem : MonoBehaviour
     public int level;
     private int experienceToNextLevel;
     private int maxExperience;
+    private StatsSystem statsSystem;
 
     void Start()
     {
+        statsSystem = GetComponent<StatsSystem>();
         level = 1;
         maxExperience = 10;
         experienceToNextLevel = maxExperience;
@@ -28,6 +30,7 @@ public class LevelSystem : MonoBehaviour
         {
             experience -= experienceToNextLevel;
             level++;
+            statsSystem.addPoints(3);
             maxExperience = level * (int) (Mathf.Log10(level) / Mathf.Log10(2)) + 10;
             experienceToNextLevel = maxExperience;
         }

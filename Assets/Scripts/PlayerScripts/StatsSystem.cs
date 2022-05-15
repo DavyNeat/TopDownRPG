@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class StatsSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public int statPoints;
     void Start()
     {
-        
+        statPoints = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void addPoints(int points)
     {
-        
+        if(points > 0)
+            statPoints += points;
+        print(statPoints);
     }
 }

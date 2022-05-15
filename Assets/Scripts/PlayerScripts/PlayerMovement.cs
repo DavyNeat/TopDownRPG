@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Vector3 velocity;
+    private float angle;
     private Transform player;
     public Transform camera;
     public float speed = 5.0f;
@@ -17,11 +18,20 @@ public class PlayerMovement : MonoBehaviour
     {
         velocity = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
         velocity *= speed;
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = mousePosition - player.position;
+        angle = Vector2.SignedAngle(Vector2.up, direction);
     }
 
     void FixedUpdate()
     {
+        player.eulerAngles = new Vector3(0f, 0f, angle);
         player.position += (velocity * Time.deltaTime);
         camera.position = new Vector3(player.position.x, player.position.y, camera.position.z);
+    }
+
+    private float findAngle(Vector3 a, Vector3 b)
+    {
+        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 }
