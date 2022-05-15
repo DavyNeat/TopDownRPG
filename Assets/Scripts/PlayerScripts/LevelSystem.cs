@@ -33,8 +33,6 @@ public class LevelSystem : MonoBehaviour
         }
 
         experienceToNextLevel -= experience;
-        print("level: " + level);
-        print("experience to next level: " + experienceToNextLevel);
     }
 
     public int getExperienceToNextLevel()
@@ -44,10 +42,8 @@ public class LevelSystem : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        print("collision");
         if (collision.tag == "ExperienceOrb")
         {
-            print("adding experience");
             addExperience(10);
             Destroy(collision.gameObject);
         }
