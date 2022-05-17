@@ -25,13 +25,13 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        player.eulerAngles = new Vector3(0f, 0f, angle);
+
+        if (Mathf.Sign(angle) >= 0)
+            player.localScale = new Vector3(1f, player.localScale.y, player.localScale.z);
+        else
+            player.localScale = new Vector3(-1f, player.localScale.y, player.localScale.z);
+        //player.eulerAngles = new Vector3(0f, 0f, angle);
         player.position += (velocity * Time.deltaTime);
         camera.position = new Vector3(player.position.x, player.position.y, camera.position.z);
-    }
-
-    private float findAngle(Vector3 a, Vector3 b)
-    {
-        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 }

@@ -45,7 +45,7 @@ public class LevelSystem : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "ExperienceOrb")
+        if (collision.tag == "ExperienceOrb" && this.tag == "Player")
         {
             addExperience(10);
             Destroy(collision.gameObject);
