@@ -7,6 +7,7 @@ public class BasicEnemy : MonoBehaviour, HurtResponder
 
     [SerializeField] private int health = 10;
     [SerializeField] private GameObject prefab;
+    [SerializeField] private int expAmount;
     //[SerializeField] private Rigidbody2D rb;
 
     private List<BasicHurtBox> hurtBoxes = new List<BasicHurtBox>();
@@ -32,10 +33,11 @@ public class BasicEnemy : MonoBehaviour, HurtResponder
     {
         if (health <= 0)
         {
-            
             Destroy(gameObject);
-            GameObject obj = Object.Instantiate(prefab, transform.position, transform.rotation);
-            obj.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f));
+            for (int i = 0; i < expAmount; i++) {
+                GameObject obj = Object.Instantiate(prefab, transform.position, transform.rotation);
+                obj.GetComponent<Rigidbody2D>().velocity = new Vector2(Random.Range(-20f, 20f), Random.Range(-20f, 20f));
+            }
         }
     }
 }

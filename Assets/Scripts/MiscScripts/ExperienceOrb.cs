@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class ExperienceOrb : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float speed = 1;
+    private Transform player;
+    private Transform orb;
+    private void Start()
     {
-        
+        orb = GetComponent<Transform>();
+        player = GameObject.Find("Player").transform;
     }
-
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        orb.position = Vector3.MoveTowards(orb.position, player.position, speed * Time.deltaTime);
     }
 }

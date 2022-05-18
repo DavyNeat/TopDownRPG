@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 10
   prefab: {fileID: 518535620469428279, guid: beb02353e4c3da947a423862f0329baf, type: 3}
+  expAmount: 10
 --- !u!1 &6951404872695015702
 GameObject:
   m_ObjectHideFlags: 0

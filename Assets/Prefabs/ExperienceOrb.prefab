@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5624972038405399707}
   - component: {fileID: 2799174561935522867}
   - component: {fileID: 7200229708135185608}
+  - component: {fileID: 1357363790}
   m_Layer: 0
   m_Name: ExperienceOrb
   m_TagString: ExperienceOrb
@@ -32,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5624972038405399707
 SpriteRenderer:
@@ -123,3 +124,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1357363790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518535620469428279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a32c26724936ff74e9108380840102fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
