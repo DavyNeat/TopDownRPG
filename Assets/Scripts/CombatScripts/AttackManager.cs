@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class AttackManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public bool canAttack;
     void Start()
     {
-        
+        canAttack = true;
     }
 
     // Update is called once per frame
@@ -15,4 +15,6 @@ public class AttackManager : MonoBehaviour
     {
         
     }
+
+
 }
