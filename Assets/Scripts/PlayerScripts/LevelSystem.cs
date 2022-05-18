@@ -30,7 +30,7 @@ public class LevelSystem : MonoBehaviour
         {
             experience -= experienceToNextLevel;
             level++;
-            statsSystem.addPoints(3);
+            statsSystem.addPoints(2);
             maxExperience = level * (int) (Mathf.Log10(level) / Mathf.Log10(2)) + 10;
             experienceToNextLevel = maxExperience;
         }
@@ -47,7 +47,7 @@ public class LevelSystem : MonoBehaviour
     {
         if (collision.tag == "ExperienceOrb" && this.tag == "Player")
         {
-            addExperience(10);
+            addExperience(1);
             Destroy(collision.gameObject);
         }
     }

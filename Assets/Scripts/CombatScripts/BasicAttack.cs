@@ -31,6 +31,7 @@ public class BasicAttack : MonoBehaviour, HitResponder
         {
             attackCoolDown -= attackCoolDown * coolDownUpgradeRate;
         }
+        print(attackCoolDown);
     }
 
     // Start is called before the first frame update
@@ -54,6 +55,7 @@ public class BasicAttack : MonoBehaviour, HitResponder
         {
             if (countDown <= 0 && canAttack)
             {
+                print("attacking");
                 hitBox.checkHit();
                 countDown = attackCoolDown;
             }

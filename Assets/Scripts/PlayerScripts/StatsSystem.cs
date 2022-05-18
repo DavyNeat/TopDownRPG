@@ -5,32 +5,54 @@ using UnityEngine.UI;
 
 public class StatsSystem : MonoBehaviour
 {
-    [SerializeField] private int atkSpd;
     [SerializeField] private Text pointsText;
-    public Dictionary<string, int> stats;
-    private Dictionary<string, int> oldStats;
-    private int statPoints;
+    private BasicAttack attack;
+    public Dictionary<string, int> newStats = new Dictionary<string, int>();
+    private Dictionary<string, int> currStats;
+    public int currStatPoints;
+    public int prevStatPoints;
     void Start()
     {
-        stats = new Dictionary<string, int>();
-        atkSpd = 0;
-        statPoints = 0;
+        currStatPoints = 0;
+        attack = GetComponentInChildren<BasicAttack>();
     }
 
     private void Update()
     {
-        pointsText.text = "Stat Points: " + statPoints.ToString();
+        pointsText.text = $"Stat Points: {currStatPoints}";
     }
 
     public void addPoints(int points)
     {
-        if(points > 0)
-            statPoints += points;
-        print(statPoints);
+        if (points > 0)
+        {
+            currStatPoints += points;
+            prevStatPoints += points;
+        }
+        
     }
 
-    public void updateStats()
+    public void updateStats(string[] statNames, int[] statPoints)
     {
+        currStats = newStats;
+        newStats = new Dictionary<string, int>();
+        int pointDifference;
+        for (int i = 0; i < statNames.Length; i++)
+        {
+            newStats.Add(statNames[i], statPoints[i]);
+            pointDifference = newStats[statNames[i]] - currStats[statNames[i]];
+
+            if (statNames[i] == "Vitality")
+            {
+                
+            }
+
+            if (statNames[i] == "Dexterity")
+            {
+                attack.updateCooldown(pointDifference);
+            }
+
+        }
 
     }
 
