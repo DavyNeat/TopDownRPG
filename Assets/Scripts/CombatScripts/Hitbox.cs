@@ -38,14 +38,14 @@ public class Hitbox : MonoBehaviour, HitDetector
                 playerTransform.forward,
                 0f);
 
-        HurtBox hurtBox = null;
-        HitData hitData = null;
+        HurtBox hurtBox;
+        HitData hitData;
         foreach (RaycastHit2D hit in hits)
         {
             print(hit.collider.gameObject.tag);
             hurtBox = hit.collider.GetComponent<HurtBox>();
             if (hurtBox != null)
-                if (hurtBox.active)
+                if (hurtBox.active && hurtBox.owner.layer != 6)
                 {
                     hitData = new HitData
                     {

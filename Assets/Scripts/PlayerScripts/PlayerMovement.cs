@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private float angle;
     private Transform player;
     public Transform camera;
-    public float speed = 5.0f;
+    [SerializeField] private float speed;
     void Start()
     {
         player = GetComponent<Transform>();
@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         velocity = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
-        velocity *= speed;
+        velocity *= Mathf.Sqrt(speed);
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 direction = mousePosition - player.position;
         angle = Vector2.SignedAngle(Vector2.up, direction);
@@ -26,12 +26,22 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (Mathf.Sign(angle) >= 0)
+        if (Mathf.Sign(angle) <= 0)
             player.localScale = new Vector3(1f, player.localScale.y, player.localScale.z);
         else
             player.localScale = new Vector3(-1f, player.localScale.y, player.localScale.z);
         //player.eulerAngles = new Vector3(0f, 0f, angle);
         player.position += (velocity * Time.deltaTime);
         camera.position = new Vector3(player.position.x, player.position.y, camera.position.z);
+    }
+
+    public bool isMoving()
+    {
+        return velocity.x != 0 || velocity.y != 0;
+    }
+
+    public void updateSpeed(int points)
+    {
+        speed += points;
     }
 }

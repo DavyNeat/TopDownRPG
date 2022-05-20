@@ -14,9 +14,11 @@ public class StatAdder : MonoBehaviour
     private Button decreasePoints;
     void Start()
     {
+        print(name);
         statValue = GetComponentInChildren<Text>();
         foreach(Button button in GetComponentsInChildren<Button>())
         {
+            print(button.name);
             if(button.name == "IncreasePoints")
                 increasePoints = button;
             else

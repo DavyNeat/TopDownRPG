@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicAttack : MonoBehaviour, HitResponder
+public class PlayerAttack : MonoBehaviour, HitResponder
 {
-    public int damage => 10;
     [SerializeField] private Hitbox hitBox;
     [SerializeField] private MenuAnimator menuAnimator;
     [SerializeField] private bool attack;
@@ -14,6 +13,11 @@ public class BasicAttack : MonoBehaviour, HitResponder
     private float countDown;
     private bool attacking;
     private RaycastHit2D[] hitObjs;
+    private int combinedDamage;
+    private int baseDamage;
+    private int weaponDamage;
+
+    public int damage => combinedDamage;
 
     public bool checkHit(HitData data)
     {
@@ -31,7 +35,18 @@ public class BasicAttack : MonoBehaviour, HitResponder
         {
             attackCoolDown -= attackCoolDown * coolDownUpgradeRate;
         }
-        print(attackCoolDown);
+    }
+
+    public void upgradeBaseDamage(int amount)
+    {
+        baseDamage += amount;
+        combinedDamage = weaponDamage + baseDamage;
+    }
+
+    public void updateWeaponDamage(int amount)
+    {
+        weaponDamage = amount;
+        combinedDamage = weaponDamage + baseDamage;
     }
 
     // Start is called before the first frame update
@@ -41,6 +56,9 @@ public class BasicAttack : MonoBehaviour, HitResponder
         hitBox.hitResponder = this;
         countDown = 0f;
         canAttack = true;
+        baseDamage = 0;
+        weaponDamage = 10;
+        combinedDamage = weaponDamage + baseDamage;
     }
 
     // Update is called once per frame

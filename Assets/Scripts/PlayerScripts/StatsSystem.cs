@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class StatsSystem : MonoBehaviour
 {
     [SerializeField] private Text pointsText;
-    private BasicAttack attack;
+    private PlayerAttack attack;
+    private PlayerMovement playerMovement;
     public Dictionary<string, int> newStats = new Dictionary<string, int>();
     private Dictionary<string, int> currStats;
     public int currStatPoints;
@@ -14,7 +15,8 @@ public class StatsSystem : MonoBehaviour
     void Start()
     {
         currStatPoints = 0;
-        attack = GetComponentInChildren<BasicAttack>();
+        attack = GetComponentInChildren<PlayerAttack>();
+        playerMovement = GetComponentInChildren<PlayerMovement>();
     }
 
     private void Update()
@@ -42,14 +44,22 @@ public class StatsSystem : MonoBehaviour
             newStats.Add(statNames[i], statPoints[i]);
             pointDifference = newStats[statNames[i]] - currStats[statNames[i]];
 
-            if (statNames[i] == "Vitality")
+            switch (statNames[i])
             {
-                
-            }
+                case "Speed":
+                    playerMovement.updateSpeed(pointDifference);
+                    break;
 
-            if (statNames[i] == "Dexterity")
-            {
-                attack.updateCooldown(pointDifference);
+                case "Dexterity":
+                    attack.updateCooldown(pointDifference);
+                    break;
+
+                case "Strength":
+                    attack.upgradeBaseDamage(pointDifference);
+                    break;
+
+                case "Vitality":
+                    break;
             }
 
         }
