@@ -8,6 +8,7 @@ public class StatsSystem : MonoBehaviour
     [SerializeField] private Text pointsText;
     private PlayerAttack attack;
     private PlayerMovement playerMovement;
+    private PlayerHealth health;
     public Dictionary<string, int> newStats = new Dictionary<string, int>();
     private Dictionary<string, int> currStats;
     public int currStatPoints;
@@ -17,6 +18,7 @@ public class StatsSystem : MonoBehaviour
         currStatPoints = 0;
         attack = GetComponentInChildren<PlayerAttack>();
         playerMovement = GetComponentInChildren<PlayerMovement>();
+        health = GetComponentInChildren<PlayerHealth>();
     }
 
     private void Update()
@@ -59,6 +61,7 @@ public class StatsSystem : MonoBehaviour
                     break;
 
                 case "Vitality":
+                    health.upgradeHealth(pointDifference);
                     break;
             }
 
