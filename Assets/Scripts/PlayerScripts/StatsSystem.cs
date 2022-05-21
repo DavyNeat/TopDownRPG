@@ -53,7 +53,7 @@ public class StatsSystem : MonoBehaviour
                     break;
 
                 case "Dexterity":
-                    attack.updateCooldown(pointDifference);
+                    attack.upgradeAttackSpeed(newStats["Dexterity"]);
                     break;
 
                 case "Strength":

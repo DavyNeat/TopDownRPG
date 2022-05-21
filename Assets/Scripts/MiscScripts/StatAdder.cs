@@ -35,8 +35,6 @@ public class StatAdder : MonoBehaviour
     private void Update()
     {
         statValue.text = $"{currStatAmount}";
-        //print(decreasePoints.gameObject.name);
-        //print(increasePoints.gameObject.name);
         if (currStatAmount == prevStatAmount)
             decreasePoints.gameObject.GetComponent<Image>().color = new Color32(200, 200, 200, 255);
         else

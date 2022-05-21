@@ -7,6 +7,7 @@ TagManager:
   - ExperienceOrb
   - PlayerAttack
   - Enemy
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -46,6 +47,9 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Weapons
+    uniqueID: 838097327
     locked: 0
   - name: UI
     uniqueID: 3769614371

@@ -7,7 +7,6 @@ public class PlayerHealth : MonoBehaviour, HurtResponder
     [SerializeField] private int health;
     [SerializeField] private int maxHealth;
     [SerializeField] private int healthPoints;
-    [SerializeField] private int modifier;
     private List<BasicHurtBox> hurtBoxes = new List<BasicHurtBox>();
     public bool checkHit(HitData data)
     {
@@ -22,17 +21,22 @@ public class PlayerHealth : MonoBehaviour, HurtResponder
     public void upgradeHealth(int amount)
     {
         healthPoints += amount;
+        float currPercent = percentHealth();
+        maxHealth = Mathf.RoundToInt(Mathf.Sqrt(healthPoints)) * healthPoints;
+        health = Mathf.RoundToInt(maxHealth * currPercent);
+    }
+
+    public float percentHealth()
+    {
         float percentHealth = (float)health / (float)maxHealth;
-        maxHealth = Mathf.RoundToInt(Mathf.Sqrt(healthPoints)) * modifier;
-        health = Mathf.RoundToInt(maxHealth * percentHealth);
+        return percentHealth;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        modifier = 20;
         healthPoints = 10;
-        maxHealth = Mathf.RoundToInt(Mathf.Sqrt(healthPoints)) * modifier;
+        maxHealth = Mathf.RoundToInt(Mathf.Sqrt(healthPoints)) * healthPoints;
         health = maxHealth;
         hurtBoxes = new List<BasicHurtBox>(GetComponentsInChildren<BasicHurtBox>());
         foreach (BasicHurtBox hurtBox in hurtBoxes)

@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour, HitResponder
 {
-    [SerializeField] private Hitbox hitBox;
+    [SerializeField] private CompHitbox hitBox;
     [SerializeField] private MenuAnimator menuAnimator;
     [SerializeField] private bool attack;
-    [SerializeField] private float attackCoolDown;
+    [SerializeField] private float attackSpeed;
     [SerializeField] private float coolDownUpgradeRate;
+    [SerializeField] private WeaponAttackMovement attackAnimator;
     public bool canAttack;
-    private float countDown;
-    private bool attacking;
-    private RaycastHit2D[] hitObjs;
     private int combinedDamage;
     private int baseDamage;
     private int weaponDamage;
@@ -29,12 +27,14 @@ public class PlayerAttack : MonoBehaviour, HitResponder
         
     }
 
-    public void updateCooldown(int amount)
+    public void upgradeAttackSpeed(int level)
     {
-        for (int i = 0; i < amount; i++)
-        {
-            attackCoolDown -= attackCoolDown * coolDownUpgradeRate;
-        }
+        if (level <= 0)
+            return;
+        attackSpeed = 1 + Mathf.Log10(level);
+        print($"attack speed: {attackSpeed}");
+        print($"level: {level}");
+        attackAnimator.updateAnimationSpeed(attackSpeed);
     }
 
     public void upgradeBaseDamage(int amount)
@@ -49,33 +49,27 @@ public class PlayerAttack : MonoBehaviour, HitResponder
         combinedDamage = weaponDamage + baseDamage;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        hitBox = GetComponent<Hitbox>();
         hitBox.hitResponder = this;
-        countDown = 0f;
         canAttack = true;
+        attackSpeed = 1f;
         baseDamage = 0;
         weaponDamage = 10;
         combinedDamage = weaponDamage + baseDamage;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(countDown > 0)
-            countDown -= Time.deltaTime;
 
-        canAttack = !menuAnimator.menuShowing;
+        canAttack = !menuAnimator.menuShowing && attackAnimator.isIdle();
+
 
         if(Input.GetMouseButton(0))
         {
-            if (countDown <= 0 && canAttack)
+            if (canAttack)
             {
-                print("attacking");
-                hitBox.checkHit();
-                countDown = attackCoolDown;
+                attackAnimator.playBasicSwing();
             }
         }
     }
