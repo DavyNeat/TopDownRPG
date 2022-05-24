@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform playerBody;
     [SerializeField] private float rollTime;
     [SerializeField] public float rollCost;
+    [SerializeField] private float sprintMultiplier;
+    [SerializeField] private float rollSpeedMultiplier;
     private Vector3 velocity;
     private Vector3 rollDirection;
     private float rollDirectionSign;
@@ -15,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private float angle;
     private Transform player;
     private bool sprinting;
-    private bool rolling;
+    public bool rolling;
     private bool canRoll;
     public bool deductRollStamina;
     private PlayerStatus status;
@@ -28,15 +30,19 @@ public class PlayerMovement : MonoBehaviour
         sprinting = false;
         rolling = false;
         rollTimeCountDown = rollTime;
-        angle = -1f;
     }
 
     void Update()
     {
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direction = mousePosition - player.position;
+        angle = Vector2.SignedAngle(Vector2.up, direction);
+
         if (rolling)
         {
             sprinting = false;
-            velocity = Mathf.Sqrt(speed) * rollDirection * 2;
+            velocity = Mathf.Sqrt(speed) * rollDirection * rollSpeedMultiplier;
             angle = rollDirectionSign;
             rollTimeCountDown -= Time.fixedDeltaTime;
             if (rollTimeCountDown <= 0)
@@ -48,20 +54,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && canRoll && !rolling)
-        {            
+        {         
+            //TODO: Make roll speed in direction opposite the mouse location
             rollDirection = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
             rollDirectionSign = -Input.GetAxisRaw("Horizontal");
             
             if(rollDirection.magnitude == 0)
             {
-                rollDirection = new Vector3(1f, 0f, 0f);
-                rollDirectionSign = -1f;
+                rollDirection = -(direction.normalized);
+                rollDirectionSign = -angle;
             }
             deductRollStamina = true;
             rolling = true;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !sprinting && status.currentStamina() > 0f)
+        velocity = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
+        
+        if (Input.GetKey(KeyCode.LeftShift) && !sprinting && status.currentStamina() > 0f && velocity.magnitude != 0)
         {
             sprinting = true;
         }
@@ -71,13 +80,10 @@ public class PlayerMovement : MonoBehaviour
             sprinting = false;
         }
 
-        velocity = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
+        
         velocity *= Mathf.Sqrt(speed);
         if (sprinting)
-            velocity *= 1.5f;
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = mousePosition - player.position;
-        angle = Vector2.SignedAngle(Vector2.up, direction);
+            velocity *= sprintMultiplier;
     }
 
     void FixedUpdate()

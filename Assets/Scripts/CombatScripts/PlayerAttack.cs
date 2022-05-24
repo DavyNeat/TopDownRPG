@@ -10,6 +10,7 @@ public class PlayerAttack : MonoBehaviour, HitResponder
     [SerializeField] private float attackSpeed;
     [SerializeField] private float coolDownUpgradeRate;
     [SerializeField] private WeaponAttackMovement attackAnimator;
+    [SerializeField] private PlayerMovement movement;
     public bool canAttack;
     private int combinedDamage;
     private int baseDamage;
@@ -32,8 +33,6 @@ public class PlayerAttack : MonoBehaviour, HitResponder
         if (level <= 0)
             return;
         attackSpeed = 1 + Mathf.Log10(level);
-        print($"attack speed: {attackSpeed}");
-        print($"level: {level}");
         attackAnimator.updateAnimationSpeed(attackSpeed);
     }
 
@@ -62,15 +61,15 @@ public class PlayerAttack : MonoBehaviour, HitResponder
     void Update()
     {
 
-        canAttack = !menuAnimator.menuShowing && attackAnimator.isIdle();
+        canAttack = !menuAnimator.menuShowing && attackAnimator.isIdle() && !movement.rolling;
 
 
-        if(Input.GetMouseButton(0))
+        if(canAttack)
         {
-            if (canAttack)
-            {
+            if (Input.GetMouseButton(0))
                 attackAnimator.playBasicSwing();
-            }
+            else if (Input.GetMouseButton(1))
+                attackAnimator.playThrust();
         }
     }
 }

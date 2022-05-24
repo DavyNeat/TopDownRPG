@@ -21,6 +21,11 @@ public class WeaponAttackMovement : MonoBehaviour
         swordAnimator.SetTrigger("swing");
     }
 
+    public void playThrust()
+    {
+        swordAnimator.SetTrigger("thrust");
+    }
+
     public bool isIdle()
     {
         return this.swordAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle");
