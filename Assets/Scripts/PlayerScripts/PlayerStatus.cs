@@ -35,7 +35,17 @@ public class PlayerStatus : MonoBehaviour, HurtResponder
 
     void Update()
     {
+        if (stamina > movement.rollCost)
+            movement.enableRoll();
+        else
+            movement.disableRoll();
 
+        if (movement.deductRollStamina)
+        {
+            stamina -= movement.rollCost;
+            movement.deductRollStamina = false;
+        }
+            
         if (stamina <= 0f && exhaustCounter <= 0f)
         {
             exhausted = true;
