@@ -30,8 +30,7 @@ public class CompHitbox : MonoBehaviour, HitDetector
     {
         HurtBox hurtBox = collision.GetComponent<HurtBox>();
         HitData hitData;
-        
-        if(collision.name == "Objects")
+        if(collision.gameObject.layer == 8)
         {
             animator.CrossFade("Idle", 0.2f);
         }

@@ -23,7 +23,11 @@ public class PlayerAnimator : MonoBehaviour
 
     void Update()
     {
-        if (movement.isMoving())
+        if (movement.isDashing())
+        {
+            ChangeAnimationState("PlayerDash");
+        }
+        else if (movement.isMoving())
         {
             ChangeAnimationState("PlayerWalking");
         }

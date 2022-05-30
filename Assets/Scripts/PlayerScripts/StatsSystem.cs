@@ -49,7 +49,7 @@ public class StatsSystem : MonoBehaviour
             switch (statNames[i])
             {
                 case "Speed":
-                    playerMovement.updateSpeed(pointDifference);
+                    playerMovement.updateSpeed(newStats["Speed"]);
                     break;
 
                 case "Dexterity":

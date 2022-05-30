@@ -48,8 +48,23 @@ public class StatAdder : MonoBehaviour
     {
         if (statsSystem.currStatPoints > 0)
         {
-            currStatAmount++;
-            statsSystem.currStatPoints--;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                int increaseAmount;
+                int leftOver = statsSystem.currStatPoints - 10;
+                if (leftOver < 0)
+                    increaseAmount = statsSystem.currStatPoints;
+                else
+                    increaseAmount = 10;
+
+                currStatAmount += increaseAmount;
+                statsSystem.currStatPoints -= increaseAmount;
+            }
+            else
+            {
+                currStatAmount++;
+                statsSystem.currStatPoints--;
+            }
         }
     }
 
@@ -57,8 +72,23 @@ public class StatAdder : MonoBehaviour
     {
         if (currStatAmount > prevStatAmount)
         {
-            currStatAmount--;
-            statsSystem.currStatPoints++;
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                int DecreaseAmount;
+                int leftOver = currStatAmount - 10;
+                if (leftOver < 0)
+                    DecreaseAmount = statsSystem.currStatPoints;
+                else
+                    DecreaseAmount = 10;
+
+                currStatAmount -= DecreaseAmount;
+                statsSystem.currStatPoints += DecreaseAmount;
+            }
+            else
+            {
+                currStatAmount--;
+                statsSystem.currStatPoints++;
+            }
         }
     }
 

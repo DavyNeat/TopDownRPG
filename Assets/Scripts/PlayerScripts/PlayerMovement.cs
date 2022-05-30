@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem sprintingDust;
+    [SerializeField] private ParticleSystem dashingDust;
     [SerializeField] private float speed;
     [SerializeField] private Transform playerBody;
-    [SerializeField] private float rollTime;
     [SerializeField] public float rollCost;
+    [SerializeField] public float rollDistance;
     [SerializeField] private float sprintMultiplier;
-    [SerializeField] private float rollSpeedMultiplier;
     private Vector3 velocity;
     private Vector3 rollDirection;
-    private float rollDirectionSign;
-    private float rollTimeCountDown;
+    private Vector3 rollLocation;
     private float angle;
     private Transform player;
     private bool sprinting;
@@ -29,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
         status = GetComponent<PlayerStatus>();
         sprinting = false;
         rolling = false;
-        rollTimeCountDown = rollTime;
     }
 
     void Update()
@@ -42,28 +41,21 @@ public class PlayerMovement : MonoBehaviour
         if (rolling)
         {
             sprinting = false;
-            velocity = Mathf.Sqrt(speed) * rollDirection * rollSpeedMultiplier;
-            angle = rollDirectionSign;
-            rollTimeCountDown -= Time.fixedDeltaTime;
-            if (rollTimeCountDown <= 0)
-            {
+            if (player.position == rollLocation)
                 rolling = false;
-                rollTimeCountDown = rollTime;
-            }
+            angle = Vector2.SignedAngle(Vector2.up, rollDirection);
             return;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && canRoll && !rolling)
         {         
-            //TODO: Make roll speed in direction opposite the mouse location
-            rollDirection = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f);
-            rollDirectionSign = -Input.GetAxisRaw("Horizontal");
-            
-            if(rollDirection.magnitude == 0)
+            rollDirection = (new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0.0f)).normalized;
+            dashingDust.Play();
+            if (rollDirection.magnitude == 0)
             {
                 rollDirection = -(direction.normalized);
-                rollDirectionSign = -angle;
             }
+            rollLocation = player.position + (rollDirection * rollDistance);
             deductRollStamina = true;
             rolling = true;
         }
@@ -75,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
             sprinting = true;
         }
 
-        if ((Input.GetKeyUp(KeyCode.LeftShift) || status.currentStamina() <= 0f) && sprinting)
+        if ((Input.GetKeyUp(KeyCode.LeftShift) || status.currentStamina() <= 0f) && sprinting || velocity.magnitude == 0)
         {
             sprinting = false;
         }
@@ -88,28 +80,48 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (sprinting)
+            sprintingDust.Play();
+        if (rolling)
+            dashingDust.Play();
 
         if (Mathf.Sign(angle) <= 0)
             playerBody.localScale = new Vector3(1f, player.localScale.y, player.localScale.z);
         else
             playerBody.localScale = new Vector3(-1f, player.localScale.y, player.localScale.z);
-        //player.eulerAngles = new Vector3(0f, 0f, angle);
-        player.position += (velocity * Time.fixedDeltaTime);
+        
+        if (!rolling)
+            player.position += (velocity * Time.fixedDeltaTime);
+        else
+            player.position = Vector3.MoveTowards(player.position, rollLocation, speed * Time.deltaTime);
         camera.position = new Vector3(player.position.x, player.position.y, camera.position.z);
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer != 0 && rolling)
+            rolling = false;
+    }
+    public void OnCollisionEnter2D (Collision2D collision)
+    {
+        if(collision.gameObject.layer != 0 && rolling)
+            rolling = false;
     }
 
     public bool isMoving()
     {
         return velocity.x != 0 || velocity.y != 0;
     }
-
-    public void updateSpeed(int points)
-    {
-        speed += points;
-    }
     public bool isSprinting()
     {
         return sprinting;
+    }
+    public bool isDashing()
+    {
+        return rolling;
+    }
+    public void updateSpeed(int points)
+    {
+        speed = Mathf.Sqrt(points);
     }
 
     public void disableRoll()
